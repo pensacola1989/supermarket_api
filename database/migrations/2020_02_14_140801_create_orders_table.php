@@ -22,6 +22,7 @@ class CreateOrdersTable extends Migration
             $table->tinyInteger('order_status')->default(1); // 0. 已取消 1.等待批价, 2.等待用户确认, 3.用户已经确认.商家准备中, 4.准备完毕 , 5.已完成
             $table->integer('pay_screenshot_id')->nullable(); // 截图凭据
             $table->bigInteger('store_id')->unsigned();
+            $table->json('addresss');
             $table->string('remark');
             $table->timestamps();
         });

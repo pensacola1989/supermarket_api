@@ -64,7 +64,7 @@ class OrderController extends Controller
             fractal(
                 $this->orderService->getOrderByOrderSn($orderSn),
                 $this->orderTransformer
-            )->parseIncludes('items,custom,store')
+            )->parseIncludes('items,custom,store,payScreeShot')
         );
     }
 

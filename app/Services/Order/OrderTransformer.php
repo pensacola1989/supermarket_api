@@ -2,6 +2,7 @@
 
 namespace App\Services\Order;
 
+use App\Http\Transformers\AttachmentTransformer;
 use App\Http\Transformers\PlaceTransfomer;
 use App\Http\Transformers\UserTranformer;
 use App\Services\Order\Order;
@@ -18,7 +19,8 @@ class OrderTransformer extends TransformerAbstract
     protected $availableIncludes = [
         'items',
         'custom',
-        'store'
+        'store',
+        'payScreeShot'
     ];
 
     private $userTransformer;
@@ -27,12 +29,19 @@ class OrderTransformer extends TransformerAbstract
 
     private $placeTransformer;
 
+    private $attachmentTransformer;
 
-    public function __construct(UserTranformer $userTranformer, OrderItemTransformer $orderItemTransformer, PlaceTransfomer $placeTransfomer)
-    {
+
+    public function __construct(
+        UserTranformer $userTranformer,
+        OrderItemTransformer $orderItemTransformer,
+        PlaceTransfomer $placeTransfomer,
+        AttachmentTransformer $attachmentTransformer
+    ) {
         $this->userTransformer =  $userTranformer;
         $this->orderItemTransformer = $orderItemTransformer;
         $this->placeTransformer = $placeTransfomer;
+        $this->attachmentTransformer = $attachmentTransformer;
     }
 
 
@@ -46,11 +55,13 @@ class OrderTransformer extends TransformerAbstract
             'mobile' => $order->mobile,
             'orderAmount' => $order->order_amount,
             'orderStatus' => $order->order_status,
-            'screenShot' => $order->pay_screenshot_id,
+            'payScreenShotId' => $order->pay_screenshot_id,
             'storeId' => $order->store_id,
+            'hasPayed' => (bool) $order->pay_screenshot_id,
             'remark' => $order->remark,
             'createdAt' => $order->created_at->format('Y-m-d H:i'),
-            'updateAt' => $order->updated_at->format('Y-m-d H:i')
+            'updateAt' => $order->updated_at->format('Y-m-d H:i'),
+            'address' => json_decode($order->address)
         ];
     }
 
@@ -67,5 +78,13 @@ class OrderTransformer extends TransformerAbstract
     public function includeStore(Order $order)
     {
         return $this->item($order->store, $this->placeTransformer);
+    }
+
+    public function includePayScreeShot(Order $order)
+    {
+        if (!$order->payScreeShot) {
+            return null;
+        }
+        return $this->item($order->payScreeShot, $this->attachmentTransformer);
     }
 }

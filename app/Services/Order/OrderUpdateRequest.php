@@ -12,7 +12,8 @@ class OrderUpdateRequest extends BaseRequest
             'customId' => 'required|alpha_num|exists:users,id',
             'storeId' => 'required|alpha_num|exists:places,id',
             'orderSn' => 'required|alpha_num',
-            'orderAmount' => 'required|alpha_num',
+            // 'orderAmount' => 'required|alpha_num',
+            "address" => 'required',
             'orderStatus' => 'required|alpha_num',
             'orderItems' => 'required|array'
         ];
@@ -30,8 +31,10 @@ class OrderUpdateRequest extends BaseRequest
             'custom_id' => $this->customId,
             'store_id' => $this->storeId,
             'order_sn' => $this->orderSn,
-            'order_amount' => $this->orderAmount,
+            // 'order_amount' => $this->orderAmount,
             'order_status' => $this->orderStatus,
+            'address' => $this->address,
+            'pay_screenshot_id' => isset($this->payScreenShotId) ? $this->payScreenShotId : null,
             'orderItems' => array_map(function ($item) {
                 return [
                     'id' => isset($item['id']) ? $item['id'] : null,

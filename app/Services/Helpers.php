@@ -1,4 +1,6 @@
-<?php namespace App\Services;
+<?php
+
+namespace App\Services;
 
 use OSS\OssClient;
 use Toin0u\Geotools\Facade\Geotools;
@@ -59,7 +61,6 @@ class Helpers
         }
 
         return $distance;
-
     }
 
     /**
@@ -110,13 +111,17 @@ class Helpers
 
     public function uploadAliOSS(string $fileName, string $path, $userId = null)
     {
-        app()->configure('oss');
-        $ossConfig = config('oss');
-        $ossClient = new OssClient($ossConfig['oss_id'], $ossConfig['oss_secret'], $ossConfig['oss_endpoint']);
-        $ossClient->uploadFile('supermarket1989', \config('app.directory.image') . '/' . $userId . '/' . $fileName, $path);
-        unlink($path);
+        try {
+            app()->configure('oss');
+            $ossConfig = config('oss');
+            $ossClient = new OssClient($ossConfig['oss_id'], $ossConfig['oss_secret'], $ossConfig['oss_endpoint']);
+            $ossClient->uploadFile($ossConfig['oss_bucket_name'], \config('app.directory.image') . '/' . $userId . '/' . $fileName, $path);
+            unlink($path);
+        } catch (\Throwable $th) {
+            dd($th);
+        }
     }
-//    public function uploadAliOSS($fileName, Request $request)
+    //    public function uploadAliOSS($fileName, Request $request)
     //    {
     //        app()->configure('oss');
     //        $ossConfig = config('oss');

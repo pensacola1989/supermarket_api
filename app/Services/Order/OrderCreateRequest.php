@@ -12,10 +12,11 @@ class OrderCreateRequest extends BaseRequest
         return [
             // 'customId' => 'required|alpha_num|exists:users,id',
             'storeId' => 'required|alpha_num|exists:places,id',
-            'mobile' => 'required|alpha_num',
+            // 'mobile' => 'required|alpha_num',
+            'address' => 'required',
             'orderItems' => 'required|array',
             'orderItems.*.name' => 'required',
-            'orderAmount' => 'required|alpha_num',
+            // 'orderAmount' => 'required|alpha_num',
             // 'orderItems.*.order_id' => 'required|alpha_num|exists:orders,id',
         ];
     }
@@ -31,7 +32,8 @@ class OrderCreateRequest extends BaseRequest
             'store_id' => $this->storeId,
             'mobile' => $this->mobile,
             'order_sn' => MyHelper::newId(),
-            'order_amount' => $this->orderAmount,
+            'address' => $this->address,
+            // 'order_amount' => $this->orderAmount,
             'orderItems' => array_map(function ($item) {
                 return [
                     'name' => $item['name'],

@@ -11,6 +11,7 @@ namespace App\Services\Order;
 
 use MyHelper;
 use App\Services\Account\User;
+use App\Services\Attachments\Attachment;
 use App\Services\Core\EntityBase;
 use App\Services\Order\OrderItem\OrderItem;
 use App\Services\Place\Place;
@@ -54,7 +55,8 @@ class Order extends EntityBase
         'pay_screenshot_id',
         'store_id',
         'remark',
-        'mobile'
+        'mobile',
+        'address'
     ];
 
 
@@ -86,5 +88,10 @@ class Order extends EntityBase
     public function items()
     {
         return $this->hasMany(OrderItem::class, 'order_id');
+    }
+
+    public function payScreeShot()
+    {
+        return $this->belongsTo(Attachment::class, 'pay_screenshot_id');
     }
 }

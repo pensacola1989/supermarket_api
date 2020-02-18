@@ -45,13 +45,12 @@ class OrderService extends EntityRepository
 
     protected function loadRelated($entity)
     {
-        $entity->load(['items']);
+        $entity->load(['items', 'payScreeShot']);
     }
 
     public function createOrder($inputs)
     {
         $order = $this->getNew($inputs);
-        $order->has_storage = 1;
         return DB::transaction(function () use ($order, $inputs) {
             $order->order_status = 1;
             $order->save();
